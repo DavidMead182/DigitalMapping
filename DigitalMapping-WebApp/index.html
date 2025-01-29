@@ -3,14 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Microcontroller Data</title>
+    <title>Fire Fighter UAV</title>
     <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
 </head>
 <body>
-    <h1>Live Microcontroller Data</h1>
-    <div id="data"></div>
+    <h1>Fire Fighter UAV</h1>
+    <p>Data Received from serial port: <div id="data"></div></p>
+    
+    <p>Upload floor plan: <input type="file" id="imageUpload" accept="image/*"></p>
+    <img id="imagePreview" src="" alt="Image Preview" style="display:none; max-width: 25%; height: auto;">
 
     <script>
+        document.getElementById("imageUpload").addEventListener("change", function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.getElementById("imagePreview");
+                    img.src = e.target.result;
+                    img.style.display = "block";
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
         const socket = io("http://localhost:3000");
 
         socket.on("serialData", (data) => {

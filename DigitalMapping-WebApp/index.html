@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microcontroller Data</title>
+    <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+</head>
+<body>
+    <h1>Live Microcontroller Data</h1>
+    <div id="data"></div>
+
+    <script>
+        const socket = io("http://localhost:3000");
+
+        socket.on("serialData", (data) => {
+            document.getElementById("data").innerText = `Received: ${data}`;
+        });
+    </script>
+</body>
+</html>

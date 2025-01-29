@@ -5,33 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fire Fighter UAV</title>
     <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+    <link rel="stylesheet" href="index.css">
+    <script src="index.js" defer></script>
 </head>
 <body>
-    <h1>Fire Fighter UAV</h1>
-    <p>Data Received from serial port: <div id="data"></div></p>
-    
-    <p>Upload floor plan: <input type="file" id="imageUpload" accept="image/*"></p>
-    <img id="imagePreview" src="" alt="Image Preview" style="display:none; max-width: 25%; height: auto;">
+    <div class="header">
+        <h1>Fire Fighter UAV</h1>
+    </div>
 
-    <script>
-        document.getElementById("imageUpload").addEventListener("change", function(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const img = document.getElementById("imagePreview");
-                    img.src = e.target.result;
-                    img.style.display = "block";
-                };
-                reader.readAsDataURL(file);
-            }
-        });
+    <div class="content">
+        <p>Data Received from serial port: <span id="data"></span></p>
+        <div class="upload-box">
+            <label for="imageUpload" class="drop-container" id="dropcontainer">
+                <span class="drop-title">Drop files here</span>
+                or
+                <input type="file" id="imageUpload" accept="image/*" required>
+              </label>
+        </div>
+        <img id="imagePreview" src="" alt="Image Preview">
 
-        const socket = io("http://localhost:3000");
+    </div>
 
-        socket.on("serialData", (data) => {
-            document.getElementById("data").innerText = `Received: ${data}`;
-        });
-    </script>
+    <div class="content">
+        <div class="upload-box">
+            <button id="createMiniMap">Create Mini Map</button>
+        </div>
+    </div>
+
 </body>
 </html>

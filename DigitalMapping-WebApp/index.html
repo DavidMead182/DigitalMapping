@@ -14,23 +14,28 @@
     </div>
 
     <div class="content">
-        <p>Data Received from serial port: <span id="data"></span></p>
         <div class="upload-box">
             <label for="imageUpload" class="drop-container" id="dropcontainer">
                 <span class="drop-title">Drop files here</span>
                 or
                 <input type="file" id="imageUpload" accept="image/*" required>
-              </label>
+            </label>
+            <div class="centre">
+                <img id="imagePreview" src="" alt="Image Preview">
+            </div>
         </div>
-        <img id="imagePreview" src="" alt="Image Preview">
-
     </div>
 
     <div class="content">
         <div class="upload-box">
-            <button id="createMiniMap">Create Mini Map</button>
+            <button id="createMiniMap" class="btn-style">Create Mini Map</button>
         </div>
     </div>
 
+    <div class="content">
+        <div class="upload-box">
+            <p>Data Received from serial port: <span id="data"></span></p>
+        </div>
+    </div>
 </body>
 </html>

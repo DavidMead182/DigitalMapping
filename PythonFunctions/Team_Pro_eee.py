@@ -30,24 +30,26 @@ def floorplan_to_maze(image_path, output_path):
 
     return maze
 
-def add_person_to_maze(maze, position):
+def add_person_to_maze(maze, position, dot_size=5):
     # Copy the maze to avoid modifying the original
     updated_maze = maze.copy()
 
     # Extract the position coordinates
     row, col = position
 
-    # Check if the position is within bounds
-    if 0 <= row < updated_maze.shape[0] and 0 <= col < updated_maze.shape[1]:
-        # Place the person represented by a 0.5 value (gray in visualization)
-        updated_maze[row, col] = 2
-    else:
-        raise ValueError("Position is out of maze bounds.")
+    # Calculate the bounds of the dot
+    row_start = max(0, row - dot_size // 2)
+    row_end = min(updated_maze.shape[0], row + dot_size // 2 + 1)
+    col_start = max(0, col - dot_size // 2)
+    col_end = min(updated_maze.shape[1], col + dot_size // 2 + 1)
+
+    # Place the dot in the maze
+    updated_maze[row_start:row_end, col_start:col_end] = 2
 
     return updated_maze
 
 # Example usage
-maze = floorplan_to_maze("floorplan.jpeg", "maze_output.jpg", maze_size=(50, 50))
+maze = floorplan_to_maze("floorplan.jpeg", "maze_output.jpg")
 updated_maze = add_person_to_maze(maze, (25, 25))
 
 maze_image = Image.fromarray((updated_maze * 255).astype('uint8'))  # Scale back to 0-255

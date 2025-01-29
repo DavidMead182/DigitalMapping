@@ -59,6 +59,13 @@ h1 {
     color: #333;
 }
 
+.centre{
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .drop-container {
     position: relative;
     display: flex;
@@ -84,6 +91,7 @@ h1 {
     color: #222;
   }
   
+  
   .drop-title {
     color: #444;
     font-size: 20px;
@@ -103,4 +111,20 @@ h1 {
     max-width: 25%;
     height: auto;
     margin-top: 10px;
+}
+
+.btn-style{
+    background-color: #ffff;
+    border: none;
+    color: #333;
+    cursor: pointer;
+    border-radius: 10px;
+    width: 100%;
+    height: 100%;
+    font-weight: bold;
+    padding: 2.5%;
+}
+
+.btn-style:hover{
+    background-color: #f3f3f3;
 }

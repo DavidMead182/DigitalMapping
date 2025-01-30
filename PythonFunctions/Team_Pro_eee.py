@@ -48,9 +48,10 @@ def add_person_to_maze(maze, position, dot_size=5):
 
     return updated_maze
 
-# Example usage
+# Example usage 
 maze = floorplan_to_maze("floorplan.jpeg", "maze_output.jpg")
 updated_maze = add_person_to_maze(maze, (25, 25))
 
 maze_image = Image.fromarray((updated_maze * 255).astype('uint8'))  # Scale back to 0-255
 maze_image.save("maze_with_dot.jpeg")
+ 

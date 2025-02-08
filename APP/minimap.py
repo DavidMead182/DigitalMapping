@@ -8,24 +8,13 @@ TILE_SIZE = 1  # Size of each tile
 PLAYER_SIZE = 10  # Size of red dot
 TRAIL_SIZE = 10  # Number of steps to keep the trail
 
-# Sample floor plan (1 = wall, 0 = open space)
-FLOOR_PLAN = [
-    [1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 0, 0, 0, 1, 0, 0, 1],
-    [1, 0, 1, 0, 1, 0, 1, 1],
-    [1, 0, 1, 0, 0, 0, 0, 1],
-    [1, 0, 1, 1, 1, 1, 0, 1],
-    [1, 0, 0, 0, 0, 0, 0, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1]
-]
-
 class FloorPlan(QGraphicsView):
     def __init__(self, floor_plan):
         super().__init__()
 
         self.scene = QGraphicsScene()
         self.setScene(self.scene)
-        floor_plan = floorplan_to_maze("./images/floorplan.jpeg", scale_factor=0.5, blur_effect=40)
+        floor_plan = floorplan_to_maze("./images/Flat.jpg", scale_factor=1, blur_effect=100)
         self.setFixedSize(len(floor_plan[0]) * TILE_SIZE, len(floor_plan) * TILE_SIZE)
 
         self.walls = []

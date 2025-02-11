@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton, QVBoxLayout, QWidget, QStackedWidget, QHBoxLayout, QFileDialog
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton, QVBoxLayout, QWidget, QStackedWidget, QHBoxLayout, QFileDialog, QSlider, QLineEdit, QFrame
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt
 import PyQt5.QtCore as QtCore
@@ -132,18 +132,66 @@ class MainWindow(QMainWindow):
         left_layout = QVBoxLayout()
         left_layout.setAlignment(Qt.AlignTop)
 
+
         logo = QLabel()
         logo.setObjectName("logo")
         pixmap_logo = QPixmap("assets/images/SFRS Logo.png")
         logo.setPixmap(pixmap_logo)
-        logo.setAlignment(Qt.AlignLeft)
+        logo.setAlignment(Qt.AlignCenter)
 
-        title = QLabel("Firefighter tracking")
+        title = QLabel("Mini Map")
         title.setObjectName("mainTitle")
-        title.setAlignment(Qt.AlignLeft)
+        title.setAlignment(Qt.AlignCenter)
 
+        subtitle = QLabel("Floor plan Settings")
+        subtitle.setObjectName("mainSubtitle")
+        subtitle.setAlignment(Qt.AlignCenter)
+        
         left_layout.addWidget(logo)
         left_layout.addWidget(title)
+        left_layout.addWidget(subtitle)
+
+        ButtonLabels = ["Image Blur", "Player Size", "Trail Size", "Tile Size", "Player Size"]
+        for i in range(4):
+            button_layout = QHBoxLayout()
+            btn_label = QLabel(ButtonLabels[i])
+            btn_label.setAlignment(Qt.AlignCenter)
+            btn_label.setObjectName("BtnLabel")
+
+            btn_down = QPushButton("∨")
+            btn_down.setFixedSize(40, 40)
+            btn_down.setObjectName("arrows")
+
+            btn_center = QLabel("1")
+            btn_center.setFixedSize(200, 40)
+            btn_center.setAlignment(Qt.AlignCenter)
+            btn_center.setObjectName("miniMapSettings")
+
+
+            btn_up = QPushButton("∧")
+            btn_up.setFixedSize(40, 40)
+            btn_up.setObjectName("arrows")
+
+            left_layout.addWidget(btn_label)
+            button_layout.addWidget(btn_down)
+            button_layout.addWidget(btn_center)
+            button_layout.addWidget(btn_up)
+            
+            left_layout.addLayout(button_layout)
+
+        recreate_button = QPushButton("Recreate Layout")
+        recreate_button.setObjectName("btnYes")
+        recreate_button.setFixedSize(200, 40)
+        #recreate_button.clicked.connect()
+
+        horizontal_line = QLabel()
+        horizontal_line.setFixedSize(250,5)
+        horizontal_line.setObjectName("horizontalLine")
+        horizontal_line.setAlignment(Qt.AlignCenter)
+
+        left_layout.addWidget(horizontal_line,alignment= Qt.AlignCenter)
+
+        left_layout.addWidget(recreate_button,alignment= Qt.AlignCenter)
 
         # Adjust the height to the remaining height and width based on the aspect ratio of the image
         remaining_height = self.height()
@@ -151,10 +199,14 @@ class MainWindow(QMainWindow):
         aspect_ratio = pixmap.width() / pixmap.height()
         adjusted_width = int(remaining_height * aspect_ratio)
 
-        self.floor_plan_view = FloorPlan(floorplan_path="assets/images/floorplan.jpeg", width=adjusted_width, height=remaining_height, blur_effect=40)
+        self.floor_plan_view = FloorPlan(floor_plan_path="Assets/images/floorplan.jpeg", width=adjusted_width, height=remaining_height, blur_effect=35)
+
+        right_layout = QVBoxLayout()
+        right_layout.setAlignment(Qt.AlignCenter)
+        right_layout.addWidget(self.floor_plan_view, alignment=Qt.AlignCenter)
 
         layout.addLayout(left_layout)
-        layout.addWidget(self.floor_plan_view, alignment=Qt.AlignRight)
+        layout.addLayout(right_layout)
 
         page.setLayout(layout)
         return page
@@ -197,87 +249,3 @@ if __name__ == "__main__":
     window.showMaximized()
     sys.exit(app.exec_())
 
-
-# # Constants
-# TILE_SIZE = 1  # Size of each tile
-# PLAYER_SIZE = 10  # Size of red dot
-# TRAIL_SIZE = 10  # Number of steps to keep the trail
-
-# class FloorPlan(QGraphicsView):
-#     def __init__(self):
-#         super().__init__()
-
-#         self.scene = QGraphicsScene()
-#         self.setScene(self.scene)
-#         floor_plan = floorplan_to_maze("./Assets/images/floorplan.jpeg", scale_factor=1, blur_effect=100)
-#         self.setFixedSize(len(floor_plan[0]) * TILE_SIZE, len(floor_plan) * TILE_SIZE)
-
-#         self.walls = []
-#         self.players = []
-#         self.trail = []
-
-#         # Draw the floor plan
-#         self.load_floor_plan(floor_plan)
-
-#         # Focus to capture key events
-#         self.setFocus()
-
-#     def load_floor_plan(self, floor_plan):
-#         for row in range(len(floor_plan)):
-#             for col in range(len(floor_plan[row])):
-#                 x, y = col * TILE_SIZE, row * TILE_SIZE
-#                 if floor_plan[row][col] == 1:
-#                     wall = QGraphicsRectItem(x, y, TILE_SIZE, TILE_SIZE)
-#                     wall.setBrush(QBrush(Qt.black))
-#                     self.scene.addItem(wall)
-#                     self.walls.append(wall)
-#                 else:
-#                     # Add a red dot at first empty space (you can change this to add more)
-#                     if not self.players:
-#                         self.add_red_dot(x + TILE_SIZE // 4, y + TILE_SIZE // 4)
-
-#     def add_red_dot(self, x, y):
-#         player = QGraphicsEllipseItem(x, y, PLAYER_SIZE, PLAYER_SIZE)
-#         player.setBrush(QBrush(Qt.red))
-#         self.scene.addItem(player)
-#         self.players.append(player)
-
-#     def keyPressEvent(self, event):
-#         if not self.players:
-#             return
-
-#         player = self.players[0]  # Single player for now
-#         dx, dy = 0, 0
-
-#         if event.key() == Qt.Key_Left:
-#             dx = -PLAYER_SIZE
-#         elif event.key() == Qt.Key_Right:
-#             dx = PLAYER_SIZE
-#         elif event.key() == Qt.Key_Up:
-#             dy = -PLAYER_SIZE
-#         elif event.key() == Qt.Key_Down:
-#             dy = PLAYER_SIZE
-#         else:
-#             return  # Ignore other keys
-
-#         # Compute new position
-#         new_x = player.x() + dx
-#         new_y = player.y() + dy
-
-#         # Collision check
-#         player_rect = player.sceneBoundingRect().translated(dx, dy)
-#         if not any(wall.sceneBoundingRect().intersects(player_rect) for wall in self.walls):
-#             # Add current position to trail
-#             trail_dot = QGraphicsEllipseItem(player.x(), player.y(), PLAYER_SIZE, PLAYER_SIZE)
-#             trail_dot.setBrush(QBrush(Qt.blue))
-#             self.scene.addItem(trail_dot)
-#             self.trail.append(trail_dot)
-
-#             # Remove old trail if it exceeds the limit
-#             if len(self.trail) > TRAIL_SIZE:
-#                 old_trail_dot = self.trail.pop(0)
-#                 self.scene.removeItem(old_trail_dot)
-
-#             # Move player
-#             player.setX(new_x)
-#             player.setY(new_y)

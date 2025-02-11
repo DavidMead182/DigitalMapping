@@ -9,10 +9,13 @@ PLAYER_SIZE = 10  # Size of red dot
 TRAIL_SIZE = 5  # Number of steps to keep the trail
 
 class FloorPlan(QWidget):
-    def __init__(self, floorplan_path, width=None, height=None, blur_effect=100, parent=None):
+    def __init__(self, floor_plan_path, width=None, height=None, blur_effect=100, parent=None):
         super().__init__(parent)
         self.layout = QVBoxLayout(self)
         self.view = QGraphicsView()
+        self.view.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.view.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        #self.view.setFrameStyle(0)
         self.layout.addWidget(self.view)
 
         # Set up the scene
@@ -20,7 +23,7 @@ class FloorPlan(QWidget):
         self.view.setScene(self.scene)
 
         # Generate the floor plan
-        floor_plan = floorplan_to_maze(floorplan_path, width, height, blur_effect)
+        floor_plan = floorplan_to_maze(floor_plan_path, width, height, blur_effect)
         self.view.setFixedSize(len(floor_plan[0]) * TILE_SIZE, len(floor_plan) * TILE_SIZE)
 
         # Store walls, players, and trail
@@ -84,6 +87,10 @@ class FloorPlan(QWidget):
         # Compute new position
         new_x = player.x() + dx
         new_y = player.y() + dy
+
+        # Boundary check
+        if new_x < 0 or new_x + PLAYER_SIZE > self.view.width() or new_y < 0 or new_y + PLAYER_SIZE > self.view.height():
+            return  # Ignore movement that would leave the view
 
         # Collision check
         player_rect = player.sceneBoundingRect().translated(dx, dy)

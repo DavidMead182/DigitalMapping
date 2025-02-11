@@ -48,3 +48,37 @@ QLabel#mainSubtitle {
 QLabel#logo {
     margin-bottom: 20px;
 }
+
+QLabel#BtnLabel {
+    font-size: 30px;
+    font-weight: bold;
+    color:black;
+}
+
+QPushButton#arrows {
+    font-weight: bold;
+    background-color: #E3E3E3;
+    color: black;
+
+}
+
+QPushButton#arrows:hover{
+    background-color:rgb(71, 71, 71);
+    color: white;
+}
+
+QLabel#miniMapSettings{
+    background-color: white;
+    border: 1px solid #E3E3E3;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+QFrame#horizontalLine {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    background-color: #E3E3E3;
+    border: 1px solid #E3E3E3;
+    border-radius: 5px;
+    height: 2px;
+}

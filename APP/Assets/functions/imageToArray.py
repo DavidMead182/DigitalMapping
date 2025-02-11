@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-def floorplan_to_maze(image_path, scale_factor=1.0, blur_effect=100):
+def floorplan_to_maze(image_path, height=None, width=None, blur_effect=100):
 
     # Load the image
     image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
@@ -22,12 +22,10 @@ def floorplan_to_maze(image_path, scale_factor=1.0, blur_effect=100):
     # Normalize the values to 0 and 1 for better representation of walls and paths
     maze = (cleaned_image > 128).astype(np.uint8)
 
-    # Resize the maze according to the scale factor
-    if scale_factor != 1.0:
-        width = int(maze.shape[1] * scale_factor)
-        height = int(maze.shape[0] * scale_factor)
+    # Resize the maze according to the specified height and width
+    if height is not None and width is not None:
         maze = cv2.resize(maze, (width, height), interpolation=cv2.INTER_NEAREST)
 
-    print(np.array2string(maze, threshold=np.inf))
+    #print(np.array2string(maze, threshold=np.inf))
 
     return maze

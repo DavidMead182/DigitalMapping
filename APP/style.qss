@@ -1,47 +1,50 @@
-QWidget {
-    background-color: #f0f0f0;
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-    color: #333333;
-}
-
-QPushButton {
-    background-color: #4CAF50;
-    border: none;
-    color: white;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 14px;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 8px;
-}
-
-QPushButton:hover {
-    background-color: #45a049;
-}
-
-QLineEdit {
-    border: 1px solid #ccc;
-    padding: 5px;
-    border-radius: 4px;
-}
-
-QLabel {
-    font-size: 14px;
-    color: #333333;
-}
-
-QComboBox {
-    border: 1px solid #ccc;
-    padding: 5px;
-    border-radius: 4px;
+QStackedWidget {
     background-color: #ffffff;
 }
 
-QComboBox QAbstractItemView {
-    border: 1px solid #ccc;
-    selection-background-color: #4CAF50;
+QPushButton {
+    font-size: 16px;
+    width: 150px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+QPushButton#btnYes {
+    background-color: #E3E3E3;
+    color: black;
+}
+
+QPushButton#btnYes:hover {
+    background-color:rgb(206, 206, 206);
+    color: black;
+}
+
+QPushButton#btnNo {
+    background-color: #2C2C2C;
+    color: white;
+}
+
+QPushButton#btnNo:hover {
+    background-color:rgb(71, 71, 71);
+    color: white;
+}
+
+QLabel {
+    font-family: Arial, sans-serif;
+}
+
+QLabel#mainTitle {
+    font-size:50px;
+    font-weight: bold;
+}
+
+QLabel#mainSubtitle {
+    font-size:25px;
+    color: #757575;
+    font-weight: 500;
+    margin-bottom: 20px;
+}
+
+QLabel#logo {
+    margin-bottom: 20px;
 }

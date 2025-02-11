@@ -1,53 +1,69 @@
-from PyQt5.QtWidgets import QApplication, QGraphicsScene, QGraphicsView, QGraphicsRectItem, QGraphicsEllipseItem
+from PyQt5.QtWidgets import QApplication, QGraphicsScene, QGraphicsView, QGraphicsRectItem, QGraphicsEllipseItem, QVBoxLayout, QWidget
 from PyQt5.QtGui import QBrush
-from PyQt5.QtCore import Qt
-from functions.imageToArray import *
+from PyQt5.QtCore import Qt, QEvent
+from Assets.functions.imageToArray import floorplan_to_maze  # Ensure this function is correctly implemented
 
 # Constants
 TILE_SIZE = 1  # Size of each tile
 PLAYER_SIZE = 10  # Size of red dot
-TRAIL_SIZE = 10  # Number of steps to keep the trail
+TRAIL_SIZE = 5  # Number of steps to keep the trail
 
-class FloorPlan(QGraphicsView):
-    def __init__(self, floor_plan):
-        super().__init__()
+class FloorPlan(QWidget):
+    def __init__(self, floorplan_path, width=None, height=None, blur_effect=100, parent=None):
+        super().__init__(parent)
+        self.layout = QVBoxLayout(self)
+        self.view = QGraphicsView()
+        self.layout.addWidget(self.view)
 
+        # Set up the scene
         self.scene = QGraphicsScene()
-        self.setScene(self.scene)
-        floor_plan = floorplan_to_maze("./images/Flat.jpg", scale_factor=1, blur_effect=100)
-        self.setFixedSize(len(floor_plan[0]) * TILE_SIZE, len(floor_plan) * TILE_SIZE)
+        self.view.setScene(self.scene)
 
+        # Generate the floor plan
+        floor_plan = floorplan_to_maze(floorplan_path, width, height, blur_effect)
+        self.view.setFixedSize(len(floor_plan[0]) * TILE_SIZE, len(floor_plan) * TILE_SIZE)
+
+        # Store walls, players, and trail
         self.walls = []
         self.players = []
         self.trail = []
 
-        # Draw the floor plan
+        # Load floor plan and draw
         self.load_floor_plan(floor_plan)
 
-        # Focus to capture key events
-        self.setFocus()
+        # Install event filter to capture key events
+        self.view.installEventFilter(self)
 
     def load_floor_plan(self, floor_plan):
+        """Load and draw the floor plan with walls and player starting position."""
         for row in range(len(floor_plan)):
             for col in range(len(floor_plan[row])):
                 x, y = col * TILE_SIZE, row * TILE_SIZE
-                if floor_plan[row][col] == 1:
+                if floor_plan[row][col] == 1:  # Wall
                     wall = QGraphicsRectItem(x, y, TILE_SIZE, TILE_SIZE)
                     wall.setBrush(QBrush(Qt.black))
                     self.scene.addItem(wall)
                     self.walls.append(wall)
-                else:
-                    # Add a red dot at first empty space (you can change this to add more)
-                    if not self.players:
+                else:  # Empty space
+                    if not self.players:  # Add red dot at the first empty space
                         self.add_red_dot(x + TILE_SIZE // 4, y + TILE_SIZE // 4)
 
     def add_red_dot(self, x, y):
+        """Add a red dot (player) at the specified coordinates."""
         player = QGraphicsEllipseItem(x, y, PLAYER_SIZE, PLAYER_SIZE)
         player.setBrush(QBrush(Qt.red))
         self.scene.addItem(player)
         self.players.append(player)
 
+    def eventFilter(self, source, event):
+        """Event filter to capture key press events."""
+        if event.type() == QEvent.KeyPress and source is self.view:
+            self.keyPressEvent(event)
+            return True
+        return super(FloorPlan, self).eventFilter(source, event)
+
     def keyPressEvent(self, event):
+        """Handle key press events for player movement."""
         if not self.players:
             return
 
@@ -86,10 +102,3 @@ class FloorPlan(QGraphicsView):
             # Move player
             player.setX(new_x)
             player.setY(new_y)
-
-if __name__ == "__main__":
-    import sys
-    app = QApplication(sys.argv)
-    window = FloorPlan(FLOOR_PLAN)
-    window.show()
-    sys.exit(app.exec_())
